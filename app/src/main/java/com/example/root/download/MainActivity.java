@@ -3,6 +3,7 @@ package com.example.root.download;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.root.entities.FileInfo;
 
+import java.io.File;
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -20,7 +23,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button end = null;
     private ProgressBar mProgressBar = null;
     private FileInfo fileInfo;
-    private String downLoadUrl = "http://dl4.yqdown.net/y7/gm/jianshenjiaocheng.apk";
+//    private String downLoadUrl = "http://p.gdown.baidu.com/cbcb9d7c67df6459dc4f11e689568e148b3baec09" +
+//            "7308703b71bebc14c0baba46c03fc48f21717b98dcf3aae13e4a5d8c2ad1346c76a3f9a6d388e1156eaff3c" +
+//            "0228996cc39e219b4dd4e14dc8d793104dfc3f3a1f268c46e38163c6791474d4af1e88e13242db8e8e1f50e1f" +
+//            "379b8002ff0c460a349fd7ba2c99aa58be10161578bbb72a0acd9ce99a9924d2a34a6d8";
+    private String downLoadUrl = "http://download.kugou.com/download/kugou_android";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         begin.setOnClickListener(this);
         end.setOnClickListener(this);
 
-        fileInfo = new FileInfo("健身教程.apk",
+        fileInfo = new FileInfo("kugou.apk",
                 "0", downLoadUrl, 0, 0);
 
 

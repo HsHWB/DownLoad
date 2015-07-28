@@ -11,7 +11,12 @@ import android.util.Log;
 
 import com.example.root.entities.FileInfo;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultUserTokenHandler;
+import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +24,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Random;
 
 
@@ -31,7 +37,7 @@ public class DownloadService extends Service{
     public static final String STOP = "STOP";
     public static final int MSG_INIT = 1;
     public static final String DOWN_PATH = Environment.getExternalStorageDirectory()
-            .getAbsolutePath() + "/Download/";
+            .getAbsolutePath() + "/downloads/";
 
     public DownloadService(){
         super();
@@ -93,15 +99,16 @@ public class DownloadService extends Service{
 
                 File dir = new File(DOWN_PATH);
                 if (!dir.exists()){
-                    dir.mkdir();
+                    dir.mkdirs();
                 }
 
                 File file = new File(dir, mFileInfo.getFileName());
+//                File file = new File(DOWN_PATH, mFileInfo.getFileName());
                 raf = new RandomAccessFile(file, "rwd");
 
                 raf.setLength(length);
                 mFileInfo.setLength(length);
-                mHandler.obtainMessage(MSG_INIT, mFileInfo);
+                mHandler.obtainMessage(MSG_INIT, mFileInfo).sendToTarget();
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -119,6 +126,9 @@ public class DownloadService extends Service{
 
     }
 
+    /**
+     * <url, void, return></>
+     */
     class DownTask extends AsyncTask<String, Integer, String>{
 
         private FileInfo mFileInfo = null;
@@ -129,49 +139,30 @@ public class DownloadService extends Service{
 
         @Override
         protected String doInBackground(String... params) {
-            HttpURLConnection conn = null;
-            RandomAccessFile raf = null;
+
+            String url = params[0];
+            HttpResponse httpResponse = null;
+            HttpGet httpGet = new HttpGet(url);
             try {
-                URL url = new URL(mFileInfo.getFileUrl());
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setRequestMethod("GET");
-
-                int length = -1;
-
-                if (conn.getResponseCode() == HttpStatus.SC_OK) {
-                    length = conn.getContentLength();
+                httpResponse = new DefaultHttpClient().execute(httpGet);
+                if (httpResponse.getStatusLine().getStatusCode() == 200){
+                    String result = EntityUtils.toString(httpResponse.getEntity());
                 }
-
-                if (length <= 0) {
-                    return null;
-                }
-
-                File dir = new File(DOWN_PATH);
-                if (!dir.exists()) {
-                    dir.mkdir();
-                }
-
-                File file = new File(dir, mFileInfo.getFileName());
-                raf = new RandomAccessFile(file, "rwd");
-
-                raf.setLength(length);
-                mFileInfo.setLength(length);
-                mHandler.obtainMessage(MSG_INIT, mFileInfo);
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                conn.disconnect();
-                try {
-                    raf.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
+
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
         }
     }
 }
