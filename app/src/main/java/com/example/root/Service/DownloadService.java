@@ -35,9 +35,11 @@ public class DownloadService extends Service{
 
     public static final String START = "START";
     public static final String STOP = "STOP";
+    public static final String UPDATE = "UPDATE";
     public static final int MSG_INIT = 1;
     public static final String DOWN_PATH = Environment.getExternalStorageDirectory()
             .getAbsolutePath() + "/downloads/";
+    public DownLoadTask mDownLoadTask = null;
 
     public DownloadService(){
         super();
@@ -51,6 +53,9 @@ public class DownloadService extends Service{
             new DownThread(fileInfo).start();
         }else {
             FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
+            if (mDownLoadTask != null){
+                mDownLoadTask.isPause = true;
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -66,6 +71,8 @@ public class DownloadService extends Service{
                 case MSG_INIT:
                     FileInfo fileInfo = (FileInfo) msg.obj;
                     System.out.println("Handle fileInfo == " + fileInfo.toString());
+                    mDownLoadTask = new DownLoadTask(DownloadService.this, fileInfo);
+                    mDownLoadTask.DownLoad();
                     break;
             }
         }

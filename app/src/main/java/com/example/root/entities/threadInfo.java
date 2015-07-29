@@ -5,8 +5,7 @@ package com.example.root.entities;
  */
 public class threadInfo {
 
-    private String threadName;
-    private String threadId;
+    private int threadId;
     private String threadUrl;
     private int start;
     private int end;
@@ -16,8 +15,8 @@ public class threadInfo {
         super();
     }
 
-    public threadInfo(String threadName, String threadId, String threadUrl, int start, int end, int finished) {
-        this.threadName = threadName;
+    public threadInfo(int threadId, String threadUrl, int start, int end, int finished) {
+
         this.threadId = threadId;
         this.threadUrl = threadUrl;
         this.start = start;
@@ -25,20 +24,12 @@ public class threadInfo {
         this.finished = finished;
     }
 
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
-    }
-
-    public String getThreadId() {
+    public int getThreadId() {
         return threadId;
     }
 
     public void setThreadId(int threadId) {
-        this.threadId = String.valueOf(threadId);
+        this.threadId = threadId;
     }
 
     public String getThreadUrl() {
@@ -76,8 +67,7 @@ public class threadInfo {
     @Override
     public String toString() {
         return "threadInfo{" +
-                "threadName='" + threadName + '\'' +
-                ", threadId='" + threadId + '\'' +
+                "threadId='" + threadId + '\'' +
                 ", threadUrl='" + threadUrl + '\'' +
                 ", start=" + start +
                 ", end=" + end +

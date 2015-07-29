@@ -1,7 +1,10 @@
 package com.example.root.download;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,12 +41,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         begin.setOnClickListener(this);
         end.setOnClickListener(this);
+        mProgressBar.setMax(100);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DownloadService.UPDATE);
+        registerReceiver(mReceiver, filter);
 
         fileInfo = new FileInfo("kugou.apk",
                 "0", downLoadUrl, 0, 0);
-
-
     }
+
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DownloadService.UPDATE.equals(intent.getAction())){
+                int finished = intent.getIntExtra("finished",0);
+                System.out.println("mReceiver");
+                mProgressBar.setProgress(finished);
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -62,6 +79,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startService(intentEnd);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
     }
 
     @Override
