@@ -3,7 +3,6 @@ package com.example.root.download;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,9 +10,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.root.Service.DownloadService;
 import com.example.root.entities.FileInfo;
-
-import java.io.File;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {

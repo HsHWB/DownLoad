@@ -12,6 +12,10 @@ public class threadInfo {
     private int end;
     private int finished;
 
+    public threadInfo() {
+        super();
+    }
+
     public threadInfo(String threadName, String threadId, String threadUrl, int start, int end, int finished) {
         this.threadName = threadName;
         this.threadId = threadId;
@@ -33,8 +37,8 @@ public class threadInfo {
         return threadId;
     }
 
-    public void setThreadId(String threadId) {
-        this.threadId = threadId;
+    public void setThreadId(int threadId) {
+        this.threadId = String.valueOf(threadId);
     }
 
     public String getThreadUrl() {

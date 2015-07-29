@@ -1,4 +1,4 @@
-package com.example.root.download;
+package com.example.root.Service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -84,7 +84,7 @@ public class DownloadService extends Service{
             try{
                 URL url = new URL(mFileInfo.getFileUrl());
                 conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(15000);
+                conn.setConnectTimeout(60000);
                 conn.setRequestMethod("GET");
 
                 int length = -1;
