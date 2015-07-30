@@ -65,7 +65,7 @@ public class DownLoadTask {
             try {
                 URL url = new URL(mThreadInfo.getThreadUrl());
                 conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(15000);
+                conn.setConnectTimeout(60000);
                 conn.setRequestMethod("GET");
                 int start = mThreadInfo.getStart()+mThreadInfo.getFinished();
                 conn.setRequestProperty("Range", "bytes=" + start + "-" + mThreadInfo.getEnd());
@@ -73,7 +73,7 @@ public class DownLoadTask {
                 raf = new RandomAccessFile(file,"rwd");
                 raf.seek(start);
 
-                Intent intent = new Intent();
+                Intent intent = new Intent(DownloadService.UPDATE);
                 mFinished += mThreadInfo.getFinished();
                 if (conn.getResponseCode() == HttpStatus.SC_PARTIAL_CONTENT){
                     inputStream = conn.getInputStream();
