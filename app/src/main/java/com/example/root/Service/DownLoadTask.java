@@ -59,7 +59,7 @@ public class DownLoadTask {
             HttpURLConnection conn = null;
             InputStream inputStream = null;
             RandomAccessFile raf = null;
-            if (mDao.isExit(mThreadInfo.getThreadUrl(), Integer.valueOf(mThreadInfo.getThreadId()))){
+            if (mDao.isExit(mThreadInfo.getThreadUrl(), mThreadInfo.getThreadId())){
                 mDao.insertThread(mThreadInfo);
             }
             try {

@@ -30,7 +30,7 @@ public class ThreadDAOImpl implements ThreadDAO{
     @Override
     public void delectThread(String url, int thread_id) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.execSQL("delet from thread_info where url = ? and thread_id = ?",
+        db.execSQL("delete from thread_info where url = ? and thread_id = ?",
                 new Object[]{url,thread_id});
         db.close();
     }
@@ -68,7 +68,7 @@ public class ThreadDAOImpl implements ThreadDAO{
         SQLiteDatabase db = mHelper.getWritableDatabase();
         threadInfo threadInfo = null;
         Cursor cursor = db.rawQuery("select * from thread_info where url = ? and thread_id = ?", new String[]{url,
-                String.valueOf(thread_id)});
+                thread_id+""});
         boolean exists = cursor.moveToNext();
         cursor.close();
         db.close();
